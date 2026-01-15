@@ -1,0 +1,107 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "Container",
+      "style": "accent",
+      "items": [
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "{{ task_name }}",
+                  "weight": "bolder",
+                  "size": "large",
+                  "color": "light"
+                }
+              ]
+            },
+            {
+              "width": "auto",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "{{ status | upper }}",
+                  "weight": "bolder",
+                  "color": "light"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "items": [
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "name": "Status:",
+              "value": "{{ status }}"
+            },
+            {
+              "name": "Assigned To:",
+              "value": "{{ assigned_to }}"
+            },
+            {
+              "name": "Priority:",
+              "value": "{{ priority }}"
+            }
+            {% if due_date %},
+            {
+              "name": "Due Date:",
+              "value": "{{ due_date }}"
+            }
+            {% endif %}
+          ]
+        },
+        {% if description %}
+        {
+          "type": "TextBlock",
+          "text": "{{ description }}",
+          "wrap": true,
+          "spacing": "medium"
+        }
+        {% endif %}
+      ]
+    }
+    {% if photos %}
+    ,
+    {
+      "type": "Container",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Attachments",
+          "weight": "bolder",
+          "size": "medium"
+        }
+        {% for photo in photos %}
+        ,
+        {
+          "type": "Image",
+          "url": "{{ photo.url }}",
+          "size": "medium",
+          "spacing": "small"
+        }
+        {% endfor %}
+      ]
+    }
+    {% endif %}
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "title": "View in Fieldwire",
+      "url": "https://app.fieldwire.io/tasks/{{ task_id }}"
+    }
+  ]
+}
